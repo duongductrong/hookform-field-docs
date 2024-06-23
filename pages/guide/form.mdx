@@ -1,0 +1,40 @@
+# Form
+
+Similar to the Form in [react-hook-form](https://react-hook-form.com/),
+it is a combined version of [FormProvider](https://react-hook-form.com/advanced-usage#FormProviderPerformance) and [useForm](https://react-hook-form.com/docs/useform) for convenience
+
+```tsx
+import React from "react";
+import { Form } from "hookform-field";
+
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"; // Import your resolver from hookform
+
+const schema = z.object({
+  name: z.string(),
+  amount: z.number(),
+  avatar: z.any(),
+  age: z.string(),
+});
+
+type SchemaInferred = z.infer<typeof schema>;
+
+const resolver = zodResolver(schema);
+
+const MyForm = () => {
+  return (
+    // `useForm` wrapped by <Form /> of hookform-field help you save time define it
+    <Form<SchemaInferred>
+      resolver={resolver}
+      defaultValues={{ name: "Bob" }}
+      onSubmit={(values) => console.log(values)} // <-- type-safe / infer type
+    >
+      ...
+    </Form>
+  );
+};
+
+export default MyForm;
+```
+
+You can define `resolver`, `defaultValues`, and other properties provided by `useForm` in the `<Form {...props} />` component via props

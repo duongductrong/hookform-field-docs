@@ -1,7 +1,8 @@
 {
   "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
+  "quick-start": "Quick start",
+  "guide": "Guide",
+  "api-reference": "API Reference",
   "about": {
     "title": "About",
     "type": "page"

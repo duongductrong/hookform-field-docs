@@ -1,0 +1,37 @@
+# Create Field API
+
+## createField(args1, args2)
+
+### Args 1
+
+- Object components
+
+### Args 2
+
+| Name                     | Type                                                                                                                                                             | Description                                                |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `suspenseFallback` (TBD) | `ReactNode`                                                                                                                                                      | Fallback content to display when the field is in suspense. |
+| `classNames`             | `{ description?: string; label?: string; message?: string; input?: string; root?: string; }`                                                                     | Custom class names for various parts of the field.         |
+| `components`             | `{ root?: keyof JSX.IntrinsicElements; label?: keyof JSX.IntrinsicElements; message?: keyof JSX.IntrinsicElements; description?: keyof JSX.IntrinsicElements; }` | Custom components for various parts of the field.          |
+
+## Return Type `createField`
+
+| Name                   | Type                     | Description                                                        |
+| ---------------------- | ------------------------ | ------------------------------------------------------------------ |
+| `name`                 | `string`                 | Name of the field.                                                 |
+| `className`            | `string`                 | Custom class name for the field.                                   |
+| `inputClassName`       | `string`                 | Custom class name for the input element.                           |
+| `labelClassName`       | `string`                 | Custom class name for the label element.                           |
+| `messageClassName`     | `string`                 | Custom class name for the message element.                         |
+| `descriptionClassName` | `string`                 | Custom class name for the description element.                     |
+| `ClassName`            | `string`                 | Another custom class name (possibly duplicate, consider revising). |
+| `description`          | `string`                 | Description of the field.                                          |
+| `disabled`             | `boolean`                | Indicates if the field is disabled.                                |
+| `id`                   | `string`                 | ID of the field.                                                   |
+| `label`                | `string`                 | Label text for the field.                                          |
+| `placeholder`          | `string`                 | Placeholder text for the input element.                            |
+| `required`             | `boolean`                | Indicates if the field is required.                                |
+| `type`                 | `HTMLInputTypeAttribute` | Type of the input element.                                         |
+| `suspenseFallback`     | `ReactNode`              | Fallback content to display when the field is in suspense.         |
+| `component`            | `keyof T`                | Component type of the field.                                       |
+| `More props`           | `<T>`                    | The props based on `component` prop                                |

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Card } from "@/components";
-import { SquarePen } from "lucide-react";
+import { SquarePen, BookMarked } from "lucide-react";
 
-# Hook Form Field
+# Guide
 
 Welcome to hookform-field! This is a plugin manage fields for react-hook-form.
 You can use it as a starting point for your own project.
@@ -15,16 +15,16 @@ To explore how to install hookform-field and learn about its API, please follow 
   <Link href="/quick-start">
     <Card
       icon={<SquarePen />}
-      label="Quick start"
-      description="Start integration hookform-field in under 5 minutes"
+      label="Create Field"
+      description="Create a root field that contains all inputs in your project"
     />
   </Link>
 
   <Link href="/api-reference">
     <Card
-      icon={<SquarePen />}
-      label="API Reference"
-      description="Explore the components, hooks, and props we support"
+      icon={<BookMarked />}
+      label="Using <Form />"
+      description="Listen submit data instead FormProvider & useForm"
     />
   </Link>
 </div>

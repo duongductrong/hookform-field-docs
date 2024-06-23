@@ -1,0 +1,217 @@
+# Create field
+
+All inputs should be included in `createField`, which receives key-value pairs,
+with the key being the `component name` and the value being the `React element`.
+
+## Prepare components
+
+> You can skip this section if you have already input components.
+
+Imagine, these are some of the input components in your projects
+
+```tsx filename="components/ui/input.tsx"
+import React from "react";
+
+export interface TextInputProps
+  extends React.ComponentPropsWithoutRef<"input"> {}
+
+const TextInput = React.forwardRef<React.ElementRef<"input">, TextInputProps>(
+  (props, ref) => {
+    return <input {...props} ref={ref} type="text" />;
+  }
+);
+
+export default TextInput;
+```
+
+```tsx filename="components/ui/number.tsx"
+import React from "react";
+
+export interface NumberInputProps
+  extends React.ComponentPropsWithoutRef<"input"> {}
+
+const NumberInput = React.forwardRef<
+  React.ElementRef<"input">,
+  NumberInputProps
+>((props, ref) => {
+  return <input {...props} ref={ref} type="number" />;
+});
+
+export default NumberInput;
+```
+
+```tsx filename="components/ui/select.tsx"
+import React from "react";
+
+export interface SelectInputProps
+  extends React.ComponentPropsWithoutRef<"select"> {
+  options: { label: string; value: any }[];
+}
+
+const SelectInput = React.forwardRef<
+  React.ElementRef<"select">,
+  SelectInputProps
+>(({ options = [], ...props }, ref) => {
+  return (
+    <select {...props} ref={ref}>
+      {options.map((option, index) => (
+        <option key={index} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  );
+});
+
+export default SelectInput;
+```
+
+## Make field
+
+Now, this is the main section to reuse your form input components in all your projects without
+re-importing those components and defining `register(...)` repeatedly.
+
+To define it easily, just call `createField` and add them into createField with key-value pairs.
+`createField` will automatically infer types when you use the `<Field />` in other places
+
+```tsx filename="components/form/field.tsx" copy
+import React from "react";
+import { createField } from "hookform-field";
+
+import TextInput from "@/components/ui/input";
+import NumberInput from "@/components/ui/number";
+import Select from "@/components/ui/select";
+
+const Field = createField({
+  text: TextInput,
+  number: NumberInput,
+  select: Select,
+});
+
+export default Field;
+```
+
+Additionally, you can still apply `next/dynamic` or `React.lazy` to get chunk files and easily apply fallback for Suspense.
+
+```tsx filename="components/form/field.tsx" {4,5,6} copy
+import React from "react";
+import { createField } from "hookform-field";
+
+const TextInput = React.lazy(() => import("@/components/ui/input"));
+const NumberInput = React.lazy(() => import("@/components/ui/number"));
+const Select = React.lazy(() => import("@/components/ui/select"));
+
+// For next.js
+// const TextInput = dynamic(() => import("@/components/ui/input"), {
+//   ssr: true,
+//   loading: () => <div>Loading</div>,
+// });
+// const NumberInput = dynamic(() => import("@/components/ui/number"), {
+//   ssr: true,
+//   loading: () => <div>Loading</div>,
+// });
+// const Select = dynamic(() => import("@/components/ui/select"), {
+//   ssr: true,
+//   loading: () => <div>Loading</div>,
+// });
+
+const Field = createField({
+  text: TextInput,
+  number: NumberInput,
+  select: Select,
+});
+
+export default Field;
+```
+
+Finally, just use them like this, and you will get suggested props based on the component you select.
+
+```tsx filename="pages/create-user.tsx" {11-14,17-20,23-31} copy
+import React from "react";
+import { Form } from "hookform-field";
+import Field from "@/components/form/field";
+
+export interface CreateUserPageProps {}
+
+const CreateUserPage = (props: CreateUserPageProps) => {
+  return (
+    <Form className="dark:bg-neutral-900 p-5 rounded-lg mt-6">
+      <Field
+        name="firstName"
+        label="First name"
+        component="text" // "text" | "number" | "select" type created
+        placeholder="Enter first name"
+      />
+      <Field
+        name="lastName"
+        label="last name"
+        component="text" // "text" | "number" | "select" type created
+        placeholder="Enter last name"
+      />
+      <Field
+        name="age"
+        label="Age"
+        component="select" // "text" | "number" | "select" type created
+        options={[
+          // type-safe, as TypeScript will require you to render the options prop because it is required
+          { label: "Option 1", value: "option-1" },
+          { label: "Option 2", value: "option-2" },
+        ]}
+        placeholder="Select age"
+      />
+    </Form>
+  );
+};
+
+export default CreateUserPage;
+```
+
+## Classnames
+
+You can add class names for custom element styling as follows:
+
+```tsx {6-12} copy
+const Field = createField(
+  {
+    ...
+  },
+  {
+    classNames: {
+      root: "flex flex-col",
+      input: "h-10 px-4 rounded-md",
+      message: "text-sm",
+      description: "text-sm",
+      label: "text-sm leading-normal mb-1",
+    },
+  }
+);
+```
+
+## Component Type
+
+You can add class names for custom element styling as follows:
+
+```tsx {6-11} copy
+const Field = createField(
+  {
+    ...
+  },
+  {
+    components: {
+      description: "small",
+      label: "label",
+      message: "small",
+      root: "div"
+    }
+  }
+);
+```
+
+## Result
+
+Tada, perfectly. You will get result like this.
+
+import CreateuserPage from "../../components/examples/pages/create-user";
+import { CreateUserPage } from "@/components";
+
+<CreateUserPage />
