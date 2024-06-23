@@ -3,14 +3,16 @@
   "quick-start": "Quick start",
   "guide": "Guide",
   "api-reference": "API Reference",
-  "about": {
-    "title": "About",
-    "type": "page"
-  },
   "contact": {
-    "title": "Contact ↗",
+    "title": "Twitter",
     "type": "page",
-    "href": "https://twitter.com/shuding_",
+    "href": "https://x.com/duongductrong_",
+    "newWindow": true
+  },
+  "github": {
+    "title": "Github",
+    "type": "page",
+    "href": "https://github.com/duongductrong/hookform-field",
     "newWindow": true
   }
 }
