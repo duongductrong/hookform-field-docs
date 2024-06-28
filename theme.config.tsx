@@ -13,6 +13,17 @@ export default {
     text: "Edit this page on GitHub",
   },
   logo: <span>✦ HookForm Field</span>,
+  footer: {
+    text: (
+      <span>
+        MIT {new Date().getFullYear()} ©{" "}
+        <a href="https://github.com/duongductrong/hookform-field" target="_blank">
+          hookform-field
+        </a>
+        .
+      </span>
+    ),
+  },
   faviconGlyph: "✦",
   useNextSeoProps() {
     const { frontMatter } = useConfig();
