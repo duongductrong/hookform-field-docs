@@ -1,0 +1,23 @@
+# FormItem
+
+`<FormItem />` is a layout component for form fields, grouping label, input, description, and message.
+
+## Props
+
+| Name      | Type      | Description                                 |
+|-----------|-----------|---------------------------------------------|
+| children  | ReactNode | The content of the form item.               |
+| component | string    | The HTML element to render (default: 'div').|
+| className | string    | Additional CSS classes.                     |
+
+## Example
+
+```tsx
+<FormItem component="div" className="mb-4">
+  <FormLabel>Email</FormLabel>
+  <FormControl>
+    <Input {...field} />
+  </FormControl>
+  <FormMessage />
+</FormItem>
+``` 

@@ -1,0 +1,150 @@
+## Create Own Field
+
+This guide demonstrates how to create your own form field component using the composition pattern, rather than relying on `createField`. By breaking down complex forms into smaller, reusable components, this approach enhances maintainability, testability, and overall code clarity.
+
+## Benefits
+
+- **Reusability**: Create reusable form components that can be shared across your application
+- **Maintainability**: Break down complex forms into smaller, manageable pieces
+- **Flexibility**: Easily combine and rearrange form components as needed
+- **Type Safety**: Leverage TypeScript to ensure type safety across your form components
+
+## How to use
+
+Basically, you can create one `OwnField` for your own form field component.
+
+```tsx
+import {
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormField,
+  FormDescription,
+} from "hookform-field";
+import { ComponentType } from "react";
+import get from "lodash/get";
+
+export interface OwnFieldProps {
+  name: string;
+  label?: string;
+  className?: string;
+  inputClassName?: string;
+  labelClassName?: string;
+  component: ComponentType<any>;
+  baseProps?: any;
+  description?: string;
+  descriptionClassName?: string;
+  messageClassName?: string;
+}
+
+const OwnField = ({
+  name,
+  label,
+  className,
+  inputClassName,
+  labelClassName,
+  component: InputComp,
+  baseProps,
+  description,
+  descriptionClassName,
+  messageClassName,
+}: OwnFieldProps) => {
+  return (
+    <FormField
+      name={name}
+      render={({ field, formState: { errors } }) => {
+        const errorState = get(errors, name);
+        return (
+          <FormItem component="div" className={className}>
+            {label ? (
+              <FormLabel component="label" className={labelClassName}>
+                {label}
+              </FormLabel>
+            ) : null}
+            <FormControl>
+              <InputComp
+                {...field}
+                {...baseProps}
+                className={inputClassName}
+                data-state={errorState ? "error" : "idle"}
+              />
+            </FormControl>
+
+            {errorState?.message ? null : description ? (
+              <FormDescription component="p" className={descriptionClassName} />
+            ) : null}
+
+            {errorState && errorState.message ? (
+              <FormMessage component="p" className={messageClassName} />
+            ) : null}
+          </FormItem>
+        );
+      }}
+    />
+  );
+};
+```
+
+Or using it directly in your form component, it looks like this:
+
+```tsx
+import { FormControl, FormField, FormMessage } from "hookform-field";
+import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
+
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+
+const SignInForm = () => {
+  const methods = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: zodResolver(schema),
+  });
+
+  return (
+    <FormProvider {...methods}>
+      <form>
+        <FormField
+          name="email"
+          render={({ field }) => {
+            return (
+              <FormControl>
+                <Input {...field} />
+                <FormMessage className="text-red-500" />
+              </FormControl>
+            );
+          }}
+        />
+
+        <FormField
+          name="password"
+          render={({ field }) => {
+            return (
+              <FormControl>
+                <PasswordInput {...field} />
+                <FormMessage className="text-red-500" />
+              </FormControl>
+            );
+          }}
+        />
+      </form>
+    </FormProvider>
+  );
+};
+
+export default SignInForm;
+```
+
+We believe that this is a good way to create your own form component.
+But we still recommend you to use `createField` for simple form components.
+We designed `createField` to be a simple and easy to use form component.
